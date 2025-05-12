@@ -1,0 +1,342 @@
+body {
+  margin: 0; 
+  padding: 0; 
+  background-color:#4199c9;
+  
+}
+
+.marker-container use{
+  transition: transform 0.2s ease;
+  opacity: 0.6;
+  filter: drop-shadow(4px 2px 0px rgba(0, 0, 0, 0.60));
+  z-index: 20;
+}
+
+.marker-container:hover use{
+  transform: scale(1.0) translateY(-1px);
+  filter: drop-shadow(6px 4px 2px rgba(0, 0, 0, 0.68));
+  cursor: pointer;
+  opacity: 0.5;
+  z-index: 10;
+}
+
+.marker-container use {
+  pointer-events: all; /* Разрешаем события мыши */
+}
+
+path {
+  stroke: #d8d5d3;
+  stroke-width: 0px;
+  stroke-linejoin: solid;
+}
+
+
+
+.marker-image {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none; /* Чтобы клики проходили сквозь foreignObject */
+}
+
+.ripples {
+  margin: 0; 
+  width: 50%;
+
+  height: 100vh;
+  padding: 0; 
+  background-image: url('https://atuin.ru/demo/ripples/water.jpg');
+  background-size: cover;
+}
+
+/* Навигационная панель */
+.main-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(20, 20, 30, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-title {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.legend-title {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.legend-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.legend-item:hover {
+  transform: scale(1.15);
+}
+
+.nav-link {
+  color: #f0f0f0;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.2s;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.nav-link:hover {
+  color: #7bb8ff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.map {
+	position: relative;
+	text-align: center;
+
+}
+
+svg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+}
+
+.description {
+  display: none;
+  position: fixed;
+  right: 0;
+  top: 60px; /* Отступ под навигационную панель */
+  width: 300px; 
+  height: calc(100vh - 60px); /* Вся высота минус навигация */
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  /* transform: translateX(10px); */
+  opacity: 0;
+  
+ 
+  background: rgba(30, 30, 40, 0.75);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  color: #f0f0f0;
+  overflow-y: auto; /* Добавляем прокрутку если контент не помещается */
+}
+
+.description img {
+  width: 100%;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+.description.fadeIn {
+  opacity: 1;
+  /* transform: translateX(0); */
+}
+
+.description hr {
+  border: none;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 15px 0;
+}
+
+.info {
+    position: absolute;
+    padding: 20px;
+    box-sizing: border-box;
+    width: 300px;
+    left: 10px;
+    top: calc(0% - -60px);
+    font-family: sans-serif;
+    text-align: left;
+    font-size:16px;
+    
+    /* Темный стеклянный эффект */
+    background: rgba(30, 30, 40, 0.75);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    color: #f0f0f0;
+}
+
+.info hr {
+    border: none;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 15px 0;
+}
+
+.info a {
+    color: #7bb8ff;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.info a:hover {
+    color: #a8d2ff;
+    text-decoration: underline;
+}
+
+.box {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  margin: 0;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.box-label {
+  font-size: 0.7rem;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.box-description {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  visibility: hidden;
+  z-index: 100;
+}
+
+.legend-item.active .box {
+  border: 2px solid white;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+}
+
+.red {
+  background-color: #ec3159;
+}
+
+.green {
+  background-color: #3ef757;
+}
+
+.blue {
+  background-color: #4061ef;
+}
+
+.yellow {
+  background-color: #ffd65c;
+}
+
+.brown {
+  background-color: #9d6b61;
+}
+
+.black {
+  background-color: #423e3e;
+}
+
+.camp {
+	background-color: #940000;
+}
+
+.purple { background-color: #9c27b0; }
+.orange { background-color: #ff9800; }
+.pink { background-color: #e91e63; }
+.cyan { background-color: #00bcd4; }
+.gray { background-color: #9e9e9e; }
+.lime { background-color: #cddc39; }
+.teal { background-color: #009688; }
+.indigo { background-color: #3f51b5; }
+.violet { background-color: #673ab7; }
+
+.part.highlighted {
+  opacity: 1 !important;
+  stroke: white;
+  stroke-width: 2px;
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+.part.camp { fill: #940000; }
+.part.green { fill: #3ef757; }
+.part.red { fill: #ec3159; }
+
+.quest-path { /* Стиль для кружков-точек */
+  r: 8px;               /* Радиус точки */
+  fill: #2646f8;         /* Цвет заливки */
+  stroke: #ff9800;       /* Цвет обводки */
+  stroke-width: 1px;     /* Толщина обводки */
+  filter: drop-shadow(0 0 5px rgba(255,235,59,0.7)); /* Свечение */
+  opacity: 0;
+  z-index: 90;
+}
+
+#activity-map {
+	display: block;
+}
+
+#camp-map {
+	display: none;
+}
+
+.part {
+  display: none;
+  stroke: #d8d5d3;
+  stroke-width: 1px;
+  transition: opacity 0.2s;
+}
+
+/* Стили для видимых меток */
+.part:visible {
+  display: block;
+}
+
+.legend-item.active .box {
+  box-shadow: 0 0 0 2px white;
+}
+	 
+
