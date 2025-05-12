@@ -7,16 +7,17 @@ body {
 
 .marker-container use{
   transition: transform 0.2s ease;
-  opacity: 0.6;
+  opacity: 0.9;
   filter: drop-shadow(4px 2px 0px rgba(0, 0, 0, 0.60));
   z-index: 20;
 }
 
+
 .marker-container:hover use{
-  transform: scale(1.0) translateY(-1px);
+  transform: scale(1.0) translateY(1px);
   filter: drop-shadow(6px 4px 2px rgba(0, 0, 0, 0.68));
   cursor: pointer;
-  opacity: 0.5;
+  opacity: 1;
   z-index: 10;
 }
 
@@ -38,7 +39,7 @@ path {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  pointer-events: none; /* Чтобы клики проходили сквозь foreignObject */
+  /* pointer-events: none; Чтобы клики проходили сквозь foreignObject */
 }
 
 .ripples {
@@ -85,12 +86,6 @@ path {
   gap: 20px;
 }
 
-.legend-title {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
 .legend-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -108,8 +103,45 @@ path {
 }
 
 .legend-item:hover {
-  transform: scale(1.15);
+  transform: scale(1.05);
 }
+
+.box {
+  width: 52px;
+  height: 52px;
+  border-radius: 4px;
+  margin: 0;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 2px solid white;
+}
+
+.box-label {
+  font-size: 0.7rem;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.box-description {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  visibility: hidden;
+  z-index: 100;
+}
+
+.legend-item.active .box {
+  box-shadow: 0 0 0 2px rgb(252, 0, 0);
+  border: 2px solid red;
+}
+
+
 
 .nav-link {
   color: #f0f0f0;
@@ -225,66 +257,39 @@ svg {
     text-decoration: underline;
 }
 
-.box {
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  margin: 0;
-  transition: all 0.2s;
-  border: 2px solid transparent;
-}
 
-.box-label {
-  font-size: 0.7rem;
-  margin-top: 5px;
-  text-align: center;
-}
-
-.box-description {
-  position: absolute;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  visibility: hidden;
-  z-index: 100;
-}
-
-.legend-item.active .box {
-  border: 2px solid white;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
-}
 
 .red {
-  background-color: #ec3159;
-}
-
-.green {
-  background-color: #3ef757;
+  background-image: url('../media/yona-icon.png');
 }
 
 .blue {
-  background-color: #4061ef;
+  background-image: url('../media/man-icon.png');
+}
+
+.green {
+  background-image: url('../media/quest-icon.png');
 }
 
 .yellow {
-  background-color: #ffd65c;
+  background-image: url('../media/chest-icon.png');
 }
 
 .brown {
-  background-color: #9d6b61;
+  background-image: url('../media/trader-icon.png');
 }
 
 .black {
-  background-color: #423e3e;
+  background-image: url('../media/boss-icon.png');
 }
 
 .camp {
-	background-color: #940000;
+  background-image: url('../media/camp-icon.png');
 }
 
-.purple { background-color: #9c27b0; }
+.purple {
+  background-image: url('../media/secret-icon.png');
+}
 .orange { background-color: #ff9800; }
 .pink { background-color: #e91e63; }
 .cyan { background-color: #00bcd4; }
@@ -335,8 +340,6 @@ svg {
   display: block;
 }
 
-.legend-item.active .box {
-  box-shadow: 0 0 0 2px white;
-}
+
 	 
 

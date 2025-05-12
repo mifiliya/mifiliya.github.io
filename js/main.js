@@ -83,7 +83,7 @@ $(document).ready(function() {
             $boxDescription.text(desc)
                 .css({
                     left: $(this).offset().left,
-                    top: $(this).offset().top - 30
+                    top: $(this).offset().top - 5
                 })
                 .css('visibility', 'visible');
         },
