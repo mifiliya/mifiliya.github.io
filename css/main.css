@@ -2,7 +2,7 @@ body {
   margin: 0; 
   padding: 0; 
   background-color:#4199c9;
-  background-image: url(../media/2.jpg);
+  background-image: url(../media/1.jpg);
   background-size: cover; /* Растягивает изображение на весь экран */
   background-position: center; /* Центрирует изображение */
   /*background-repeat: no-repeat; /* Отключает повторение */
