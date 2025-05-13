@@ -1,187 +1,583 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-<title>jQuery WebGL Ripples</title>
-<style>
-* { margin: 0; padding: 0; }
-html {
-	height: 100%;
-}
-body {
-	color: #fff;
-	font-size: 16px;
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-	background-image: url(img/bg2.jpg);
-	background-size: cover;
-	background-position: 50% 0;
-	height: 100%;
-	text-align: center;
-}
-
-body:before {
-	content: '';
-	display: inline-block;
-	vertical-align: middle;
-	height: 100%;
-}
-
-main {
-	display: inline-block;
-	vertical-align: middle;
-	background: url(img/bg.jpg);
-	padding:  100px;
-	max-width: 500px;
-	text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-	box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-}
-
-h1 {
-	font-size: 32px;
-}
-h2 {
-	font-size: 18px;
-	margin-top: 6px;
-}
-p {
-	text-align: left;
-	margin-top: 20px;
-}
-a {
-	color: #ff6800;
-}
-pre {
-	text-align: left;
-	margin-top: 20px;
-}
-
-.error {
-	display: none;
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	background: #000;
-	color: #f00;
-	padding: 5px;
-	max-width: 50%;
-}
-
-button {
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-	padding: 0 0.8em;
-	line-height: 2em;
-	border: none;
-	background: #666;
-	color: #fff;
-	text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-	border-radius: 4px;
-	cursor: pointer;
-	margin-bottom: 0.5em;
-	box-shadow: 0 2px 3px rgba(0,0,0,0.5);
-}
-
-button:hover {
-	background: #888;
-}
-
-code { font-size: 0.8em; display: inline; }
-
-.disable {
-	position: fixed;
-	bottom: 0;
-	right: 0;
-}
-
-.code-string { color:#ec7600 }
-.code-cbracket { font-weight:bold }
-.code-number { color:#ffcd22 }
-
-</style>
+	<meta charset="UTF-8">
+	<title>Интерактивная карта</title>
+	<meta name="description" content="">
+	<meta name="keywords" content=" ">
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/media.css">
+	<link rel="stylesheet" href="css/fonts.css">
+	<link rel="icon" type="image/x-icon" href="/images/favicon.ico">	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 </head>
+
 <body>
 
-<main>
-	<header>
-		<h1>jQuery Ripples</h1>
-		<h2>A simple WebGL-based ripple effect.</h2>
-	</header>
-	<p>Background images are often boring. Use this effect to make your static CSS background images more interactive!</p>
-	<p>It's as easy as:</p>
+	<svg width="0" height="0" style="position: absolute;">
+		<!-- <symbol id="custom-marker" viewBox="0 0 52 70">
+			<rect x="0" y="0" width="50" height="50" rx="3" fill="#ffffff"/>
+			<path d="M18 49 L25 70 L32 49 Z" fill="#ffffff"/>
+		</symbol> -->
 
-	<pre><code>
-$(<span class="code-string">'body'</span>).ripples(<span class="code-cbracket">{</span>
-	resolution: <span class="code-number">512</span>,
-	dropRadius: <span class="code-number">20</span>,
-	perturbance: <span class="code-number">0.04</span>,
-<span class="code-cbracket">}</span>);
-	</code></pre>
+		<!-- Новые маркеры с изображениями -->
+  		<symbol id="yona-marker" viewBox="0 0 52 70">
+			<rect x="0" y="0" width="50" height="50" rx="3" fill="white" stroke="white" stroke-width="4"/> <!-- Красный для Йоны -->
+    		<image href="./media/yona-icon.png" width="49" height="47" x="0" y="2"/>
+    		<path d="M18 49 L25 70 L32 49 Z" fill="#ffffff"/>
+		</symbol>
 
-	<p>You can add drops programmatically by doing <code>$(<span class="code-string">'body'</span>).ripples(<span class="code-string">"drop"</span>, x, y, radius, strength)</code></p>
+		<symbol id="man-marker" viewBox="0 0 52 70">
+			<rect x="0" y="0" width="50" height="50" rx="3" fill="white" stroke="white" stroke-width="4"/> <!-- Красный для Йоны -->
+    		<image href="./media/man-icon.png" width="49" height="47" x="0" y="2"/>
+    		<path d="M18 49 L25 70 L32 49 Z" fill="#ffffff"/>
+		</symbol>
 
-	<p>And you can change its state:<br>
-	<button class="js-ripples-pause" type="button">
-		<code>$(<span class="code-string">'body'</span>).ripples(<span class="code-string">"pause"</span>)</code>
-	</button>
+		<symbol id="quest-marker" viewBox="0 0 52 70">
+			<rect x="0" y="0" width="50" height="50" rx="3" fill="white" stroke="white" stroke-width="4"/> <!-- Красный для Йоны -->
+    		<image href="./media/quest-icon.png" width="49" height="47" x="0" y="2"/>
+    		<path d="M18 49 L25 70 L32 49 Z" fill="#ffffff"/>
+		</symbol>
 
-	<button class="js-ripples-play" type="button">
-		<code>$(<span class="code-string">'body'</span>).ripples(<span class="code-string">"play"</span>)</code>
-	</button>
-	</p>
+		<symbol id="chest-marker" viewBox="0 0 52 70">
+			<rect x="0" y="0" width="50" height="50" rx="3" fill="white" stroke="white" stroke-width="4"/> <!-- Красный для Йоны -->
+    		<image href="./media/chest-icon.png" width="49" height="47" x="0" y="2"/>
+    		<path d="M18 49 L25 70 L32 49 Z" fill="#ffffff"/>
+		</symbol>
 
-	<p>Download or fork this effect at <a href="//github.com/sirxemic/jquery.ripples/">Github</a>.</p>
-</main>
+		<symbol id="boss-marker" viewBox="0 0 52 70">
+			<rect x="0" y="0" width="50" height="50" rx="3" fill="white" stroke="white" stroke-width="4"/> <!-- Красный для Йоны -->
+    		<image href="./media/boss-icon.png" width="49" height="47" x="0" y="2"/>
+    		<path d="M18 49 L25 70 L32 49 Z" fill="#ffffff"/>
+		</symbol>
 
-<button class="js-ripples-disable disable">
-	Click here if your PC can't handle this effect very well
-	(<code>$(<span class="code-string">'body'</span>).ripples(<span class="code-string">"destroy"</span>)</code>)
-</button>
+		<symbol id="camp-marker" viewBox="0 0 52 70">
+			<rect x="0" y="0" width="50" height="50" rx="3" fill="white" stroke="white" stroke-width="4"/> <!-- Красный для Йоны -->
+    		<image href="./media/camp-icon.png" width="49" height="47" x="0" y="2"/>
+    		<path d="M18 49 L25 70 L32 49 Z" fill="#ffffff"/>
+		</symbol>
 
-<div class="error"></div>
+		<symbol id="trader-marker" viewBox="0 0 52 70">
+			<rect x="0" y="0" width="50" height="50" rx="3" fill="white" stroke="white" stroke-width="4"/> <!-- Красный для Йоны -->
+    		<image href="./media/trader-icon.png" width="49" height="47" x="0" y="2"/>
+    		<path d="M18 49 L25 70 L32 49 Z" fill="#ffffff"/>
+		</symbol>
+	</svg>
+	
+	<nav class="main-nav">
+		<div class="nav-container">
+			<div class="nav-title">Интерактивная карта</div>
+			<div class="nav-links">
+				<a href="https://mifiliya.github.io/" class="nav-link">Карта</a>
+				<a href="https://mifiliya.github.io/" class="nav-link">Гайды</a>
+				<a href="https://t.me/Mifiliya" class="nav-link">Телеграм</a>
+			</div>
+		</div>
+	</nav>
+	<div class="map" id="active">
+		<svg viewBox="0 0 1140 1140" id="activity-map" >
+			
+						<!-- Квесты Йоны -->
+			<a href="https://discord.com/channels/1175566322462109746/1246567065205080094" target="”_blank”">
+				<g class="marker-container yona part" transform="translate(959,798)" description-data="<img src='media/daddy.png'> Дяденька <hr> Выпадает мужской верстак <br><br> <img src='media/bench_mens.png'>" fill="#ec3159">
+					<use href="#yona-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-<script src="jquery.ripples.js"></script>
+			<!-- <g class="marker-container" transform="translate(650,408)" description-data="Описание метки">
+				<use href="#yona-marker" width="60" height="70" color="#4061ef"/>
+			</g> -->
+
+			<a href="https://discord.com/channels/1175566322462109746/1246565807027261560" target="”_blank”">
+				<g class="marker-container yona part" transform="translate(671,462)" description-data="<img src='media/bandits.png'> Контрбандисты  <hr> Выпадает статуэтка <br><br> <img src='media/icon_stone_tinko.png'>" fill="#ec3159">
+					<use href="#yona-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+
+			<a href="https://discord.com/channels/1175566322462109746/1246563141127766157" target="”_blank”">
+				<g class="marker-container yona part" transform="translate(712,326)" description-data="<img src='media/doctor.png'> Доктор Эд" fill="#ec3159">
+					<use href="#yona-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+
+			<a href="https://discord.com/channels/1175566322462109746/1246563881321627649" target="”_blank”">
+				<g class="marker-container yona part" id="quest-dalman" transform="translate(758,152)" description-data="<img src='media/dalman.png'> Доктор Далман <hr> У Кэсси открывается рецепт Дарм-Машины <br><br> <img src='media/darm.png'>" fill="#3ef757">
+					<use href="#yona-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			<path class="quest-path quest-dalman" d="m 737.24845,370.85551 -8.60655,-23.37073 16.1419,-70.29537 36.66514,-67.88647 4.52331,6.32038 -34.83829,64.81305 -15.3249,66.16823 5.35086,15.26383 z" fill="#3ef757" style="opacity: 0; transition: opacity 0.25s ease-in-out;"></path>
+			<circle class="quest-path quest-dalman" r="10" fill="#3ef757" stroke="#d8d5d3" strokewidth="4" style="opacity: 0; transition: opacity 0.25s ease-in-out;">
+    			<animateMotion dur="2s" repeatCount="indefinite" path="m 737.24845,370.85551 -8.60655,-23.37073 16.1419,-70.29537 36.66514,-67.88647 4.52331 z"></animateMotion>
+  			</circle>
+
+			<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3255809766" target="”_blank”">
+				<g class="marker-container yona part" id="quest-1" transform="translate(993,695)" description-data="<img src='media/riona-quest-1.png'> Квест с Рейко, Кейго и Такуми <hr> После прохождения цепочки квестов становятся доступные Верстак такуми и Рация" fill="#ec3159">
+					<use href="#yona-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+				
+			<!-- Квесты Парня -->
+			<a href="https://discord.com/channels/1175566322462109746/1246562173178875996" target="”_blank”">
+				<g class="marker-container man part" id="quest-giant" transform="translate(423,106)" description-data="<img src='media/giant.png'> Гигант  <hr> Выпадает милый верстак <br><br> <img src='media/bench_pretty.png'>" fill="#4061ef">
+					<use href="#man-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+
+			<a href="#" target="”_blank”">
+				<g class="marker-container man part" id="quest-salli" transform="translate(667,246)" description-data="<img src='media/salli.png'> Салли" fill="#4061ef">
+					<use href="#man-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			<path class="quest-path quest-salli" d="m 560.26962,374.34763 32.9886,-17.66371 -2.42996,-32.2838 -69.42753,-31.06882 7.81059,-13.01765 -19.96041,-16.48905 -25.34104,17.35689 -21.52254,-20.82826 60.74909,-71.68392 27.07673,12.84409 0.17357,24.82034 -5.38063,11.80268 -0.17356,-32.80451 -19.78685,-9.37271 -54.67418,63.52618 14.23264,14.40622 25.16748,-16.83617 27.59744,22.04323 -8.15773,11.45554 66.47686,29.85384 3.12424,40.44153 -36.1339,18.94007 z" fill="#3ef757"></path>
+			<path class="quest-path quest-salli" d="m 595.68724,320.40591 79.82798,-28.30449 15.09599,1.96371 -2.587,5.88188 -11.91639,-1.99658 -80.10848,28.71102 z" fill="#4061ef"></path>
+			<circle class="quest-path quest-salli" r="10" fill="#4061ef" stroke="#d8d5d3" strokewidth="4">
+    			<animateMotion dur="2s" repeatCount="indefinite" path="m 560.63835,374.33165 33.01483,-16.81424 -3.55922,-32.89209 -68.48428,-31.05112 7.73209,-13.13229 -20.49619,-16.93697 -25.28273,17.67336 -21.84624,-21.10985 61.24312,-71.42984 27.61463,13.74594 -0.61366,23.93268 -4.66381,9.69581 -0.73639,-30.43746 -19.3916,-8.95941 -54.86107,62.83862 13.50049,13.86868 25.65092,-15.83239 27.86009,22.4599 -6.87297,9.20488 64.80233,31.41931 80.38926,-28.35102 14.97326 z"></animateMotion>
+  			</circle>
+			<!-- <a href="https://discord.com/channels/1175566322462109746/1197888320437501952" target="”_blank”">
+				<path class="quest-path quest-salli" d="m 542.61407,243.40125 8.3313,11.97625 h 2.7771 l 8.85201,-11.62911 -10.06699,-22.56395 z" fill="#3ef757"></path>
+			</a>  -->
+
+			<a href="https://discord.com/channels/1175566322462109746/1246560340834127953" target="”_blank”">
+				<g class="marker-container man part" id="quest-shino" transform="translate(820,355)" description-data="<img src='media/shino.png'> Шино  <hr> Нужен стейк <br><br><img src='media/icon_cook_steak_01.png'>" fill="#4061ef">
+					<use href="#man-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			<path class="quest-path" id="quest-shino-1" d="m 804.94885,371.58953 8.3313,11.97625 h 2.7771 l 8.852,-11.62911 -10.067,-22.56395z" fill="#4061ef" style="opacity: 0; transition: opacity 0.25s ease-in-out;"></path>
+
+			<path class="quest-path quest-path-shino" d="m 853.09074,392.61267 42.71027,-16.773 -15.34596,-22.38528 -57.44255,14.38261 -3.0734,-5.85923 62.6409,-16.42331 21.95539,33.37605 -49.01468,19.49671 z" fill="#4061ef" style="opacity: 0; transition: opacity 0.25s ease-in-out;"></path>
+			<circle class="quest-path quest-path-shino" r="10" fill="#4061ef" stroke="#d8d5d3" strokewidth="4" style="opacity: 0; transition: opacity 0.25s ease-in-out;">
+    			<animateMotion dur="2s" repeatCount="indefinite" path="m 853.09074,392.61267 42.71027,-16.773 -15.34596,-22.38528 -57.44255,14.38261 -3.0734,-5.85923 62.6409,-16.42331 21.95539,33.37605 -49.01468,19.49671 z"></animateMotion>
+  			</circle>
+
+			<a href="https://discord.com/channels/1175566322462109746/1246577987231547474" target="”_blank”">
+				<g class="marker-container man part" transform="translate(936,1028)" description-data="<img src='media/mermaid.png'> Русалка  <hr> Нужен купальник <br><br><img src='media/icon_cloth_20.png'>" fill="#4061ef">
+					<use href="#man-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+
+			<!-- Общие квесты -->
+			<a href="#">
+				<g class="marker-container quest part" transform="translate(327,551)" description-data="<img src='media/hell.png'>Бездна" fill="#3ef757">
+					<use href="#quest-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+
+			<a href="#">
+				<g class="marker-container quest part" transform="translate(530,173)" description-data="<img src='media/hell.png'>Строительство моста" fill="#3ef757">
+					<use href="#quest-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+
+			<a href="#">
+				<g class="marker-container quest part" id="quest-5" transform="translate(523,317)" description-data="<img src='media/gates.png'> Врата" fill="#3ef757">
+					<use href="#quest-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+
+			<a href="https://discord.com/channels/1175566322462109746/1246560837578002573" target="”_blank”">
+				<g class="marker-container quest part" transform="translate(431,692)" description-data="<img src='media/nikkii.png'>Литл н Никки  <hr> Нужен сникерс <br><br><img src='media/fnickers.png'>" fill="#3ef757">
+					<use href="#quest-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+
+			<!-- Боссы -->
+			<a href="https://discord.com/channels/1175566322462109746/1246568242311463053" target="”_blank”">
+				<g class="marker-container boss part" transform="translate(543,748)" description-data="<img src='media/native-boss.png'> Босс туземцев  <hr> Выпадает мясной верстак <br><br> <img src='media/bench_meat.png'>" fill="#3ef757">
+					<use href="#boss-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+
+			<a href="https://discord.com/channels/1175566322462109746/1245723076742615040" target="”_blank”">
+				<g class="marker-container boss part" transform="translate(317,330)" description-data="<img src='media/ant.png'> Погремушка  <hr> Выпадает красный камень <img src='media/icon_stone_red.png'>" fill="#3ef757">
+					<use href="#boss-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+
+			<a href="https://discord.com/channels/1175566322462109746/1245717022659051580" target="”_blank”">
+				<g class="marker-container boss part" transform="translate(352,765)" description-data="<img src='media/spider.png'>Спайк  <hr> Выпадает паучий верстак <br><br><img src='media/bench_spider.png'>" fill="#3ef757">
+					<use href="#boss-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+
+			<a href="https://discord.com/channels/1175566322462109746/1245721045428863066" target="”_blank”">
+				<g class="marker-container boss part" transform="translate(930,178)" description-data="<img src='media/nex.png'> Некс  <hr> Выпадает синий камень <img src='media/icon_stone_blue.png'>" fill="#3ef757">
+					<use href="#boss-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+
+			<a href="https://discord.com/channels/1175566322462109746/1245720719581778034" target="”_blank”">
+				<g class="marker-container boss part" transform="translate(881,467)" description-data="<img src='media/planton.png'> Плантон  <hr> Выпадает зеленый камень <img src='media/icon_stone_green.png'>" fill="#3ef757">
+					<use href="#boss-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+
+			<a href="https://discord.com/channels/1175566322462109746/1245730989372735622" target="”_blank”">
+				<g class="marker-container boss part" transform="translate(474,91)" description-data="<img src='media/goat.png'>Бафомет" fill="#423e3e">
+					<use href="#boss-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+				
+			<a href="https://discord.com/channels/1175566322462109746/1245721252983996526" target="”_blank”">
+				<g class="marker-container boss part" transform="translate(441,607)" description-data="<img src='media/mini-boss-2.png'>Оборотень" fill="#423e3e">
+					<use href="#boss-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+
+			<a href="https://discord.com/channels/1175566322462109746/1245724683236802600" target="”_blank”">
+				<g class="marker-container boss part" transform="translate(188,351)" description-data="<img src='media/mini-boss-1.png'>Барфант" fill="#423e3e">
+					<use href="#boss-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+				
+			<a href="https://discord.com/channels/1175566322462109746/1245721154711195688" target="”_blank”">
+				<g class="marker-container boss part" transform="translate(256,907)" description-data="<img src='media/mini-boss-3.png'>Йети" fill="#423e3e">
+					<use href="#boss-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+
+			<!-- Лагеря туземцев -->
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(663,959)" description-data="Маленький лагерь <hr> Туземка - 1 <br> Туземец - 1" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(348,938)" description-data="Средний лагерь <hr> Туземка - 3 <br> Туземец - 4 <br> Огромный туземец - 1" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(528,892)" description-data="Маленький лагерь <hr> Туземец - 3" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(750,869)" description-data="Средний лагерь <hr> Туземец - 2 <br> Огромный туземец - 1" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(674,727)" description-data="Большой лагерь <hr> Туземка - 4 <br> Туземка девочка - 2 <br> Туземец - 4 <br> Огромный туземец - 2 <br> Старая туземка - 2 <br> Старый туземец - 1" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(543,725)" description-data="Средний лагерь <hr> Туземка - 5 <br> Туземец - 6 <br> Огромный туземец - 2" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(543,725)" description-data="Маленький лагерь <hr> Туземка - 1 <br> Туземка девочка - 1 <br> Туземец - 1" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(743,577)" description-data="Большой лагерь <hr> Туземка - 5 <br> Туземка девочка - 2 <br> Туземец - 6 <br> Маленький туземец - 3 <br> Огромный туземец - 3 <br> Старая туземка - 1 <br> Старый туземец - 1" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(277,540)" description-data="Маленький лагерь <hr> Туземка - 1 <br> Туземка девочка - 2 <br> Туземец - 1 <br> Старая туземка - 2" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>			
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(721,362)" description-data="Большой лагерь <hr> Туземка - 6 <br> Туземка девочка - 2 <br> Туземец - 6 <br> Маленький туземец - 3 <br> Огромный туземец - 2 <br> Старая туземка - 2 <br> Старый туземец - 2" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>	
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(366,222)" description-data="Средний лагерь <hr> Туземка - 4 <br> Туземка девочка - 1 <br> Туземец - 4 <br> Огромный туземец - 2" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>	
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(1047,772)" description-data="Средний лагерь <hr> Туземка девочка - 6" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>	
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(840,741)" description-data="Средний лагерь <hr> Туземка - 5" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>	
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(941,730)" description-data="Средний лагерь <hr> Туземка - 2 <br> Туземец - 3 <br> Маленький туземец - 1 <br> Огромный туземец - 1 <br> Старая туземка - 1" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>	
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(950,236)" description-data="Маленький лагерь <hr> Туземка - 4 <br> Туземец - 5" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>	
+			<a href="#">
+				<g class="marker-container camp part" transform="translate(657,214)" description-data="Средний лагерь <hr> Туземка - 3 <br> Туземец - 5 <br> Маленький туземец - 4 <br> Огромный туземец - 5" fill="#940000">
+					<use href="#camp-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>	
+			
+			<!-- Добавляем для всех новых меток -->
+			<path class="part purple" d="..." description-data="..." fill="#9c27b0"></path>
+            <path class="part orange" d="..." description-data="..." fill="#ff9800"></path>
+		
+
+			
+
+			
+
+			
+			
+			
+			
+			<path class="quest-path quest-path-5" d="m 349.90804,395.19604 12.82547,4.97063 -1.16595,7.79346 -21.60078,1.22732 -16.69151,4.90927 -2.94556,8.83668 5.40019,14.23688 14.23688,11.04585 44.18341,-7.36391 72.65716,-11.29131 94.99432,-37.06497 -2.3319,-3.80468 -92.66242,36.20585 -115.36779,19.51434 -12.7641,-9.94127 -4.90927,-11.29132 2.45464,-7.11844 14.7278,-3.68195 23.25766,-1.59551 2.02507,-12.15044 -14.29824,-6.13658 z" fill="#3ef757"></path>
+			<circle class="quest-path quest-path-5" r="10" fill="#3ef757" stroke="#d8d5d3" strokewidth="4">
+    			<animateMotion dur="2s" repeatCount="indefinite" path="m 549.34704,389.05945 -92.66243,36.08312 -114.99959,19.39161 -12.76409,-9.94127 -5.27747,-11.04585 2.45464,-7.3639 14.97326,-3.80469 23.56449,-1.71824 1.68114,-12.14622 -14.31943,-5.90134 -1.82247,2.69031 12.67053,5.0335 -1.38855,7.72381 -21.34897,1.1282 -16.66261,5.0335 -3.12423,8.85201 5.72777,14.23264 14.05907,11.1084 116.81182,-18.83221 94.94214,-37.14373 z"></animateMotion>
+  			</circle>
+
+			<path class="quest-path quest-giant" d="m 558.35729,369.82908 33.70038,-14.64357 -2.7001,-30.92839 -65.29326,-29.4556 4.66381,-20.61893 -17.67337,-11.78224 -28.71921,23.31902 -20.37346,-18.90068 6.62751,-25.03726 36.67827,-30.75227 -48.15368,-40.92304 4.17288,-5.33882 53.12973,46.69579 -40.01489,33.95818 -5.33883,19.47838 13.27246,12.41951 28.35103,-22.65091 26.7555,18.65522 -4.78653,18.53249 63.42612,28.5333 0.98185,40.23344 -36.77229,14.90648 z" fill="#4061ef" style="opacity: 0; transition: opacity 0.25s ease-in-out;"></path>
+			<circle class="quest-path quest-giant" r="10" fill="#4061ef" stroke="#d8d5d3" strokewidth="4" style="opacity: 0; transition: opacity 0.25s ease-in-out;">
+    			<animateMotion dur="2s" repeatCount="indefinite" path="m 558.35729,369.82908 33.70038,-14.64357 -2.7001,-30.92839 -65.29326,-29.4556 4.66381,-20.61893 -17.67337,-11.78224 -28.71921,23.31902 -20.37346,-18.90068 6.62751,-25.03726 36.67827,-30.75227 -48.15368,-40.92304 4.17288 z"></animateMotion>
+  			</circle>
+
+			
+			
+			
+			
+			<path class="quest-path quest-path-5" d="m 558.87544,387.4131 52.59128,41.64455 127.62351,25.49841 109.27842,1.41322 67.83212,-23.22968 19.50562,-16.56516 0.36459,-8.1373 -48.96633,-47.45144 -27.17455,-5.80689 -22.43373,-13.03934 -10.26734,-12.41908 -1.98115,-31.57331 5.64565,-24.30088 31.41932,-22.58263 29.70106,-11.04585 11.59335,7.83526 5.63843,11.03564 10.00232,13.50048 11.39299,6.17871 9.68198,-5.42998 7.16566,-12.50119 7.60936,-22.33716 3.92742,5.64565 -12.65009,31.88046 -12.78877,8.82435 -15.16428,-3.23825 -25.33294,-33.52681 -32.7802,10.53537 -24.86669,19.62878 -4.90628,19.97592 2.0335,28.13684 8.79244,11.06242 22.50052,11.70736 25.19339,6.16636 45.42306,43.24367 8.34575,7.3639 -0.0719,10.9863 -23.49259,20.43301 -68.97521,23.80995 -111.31765,-0.61366 -130.46377,-27.1237 -53.0201,-41.42631 z" fill="#3ef757"></path>
+			<circle class="quest-path quest-path-5" r="10" fill="#3ef757" stroke="#d8d5d3" strokewidth="4">
+    			<animateMotion dur="2s" repeatCount="indefinite" path="m 558.87544,387.4131 52.59128,41.64455 127.62351,25.49841 109.27842,1.41322 67.83212,-23.22968 19.50562,-16.56516 0.36459,-8.1373 -48.96633,-47.45144 -27.17455,-5.80689 -22.43373,-13.03934 -10.26734,-12.41908 -1.98115,-31.57331 5.64565,-24.30088 31.41932,-22.58263 29.70106,-11.04585 11.59335,7.83526 5.63843,11.03564 10.00232,13.50048 11.39299,6.17871 9.68198,-5.42998 7.16566,-12.50119 7.60936,-22.33716 3.92742,5.64565 -12.65009,31.88046 -12.78877,8.82435 -15.16428,-3.23825 -25.33294,-33.52681 -32.7802,10.53537 -24.86669,19.62878 -4.90628,19.97592 2.0335,28.13684 8.79244,11.06242 22.50052,11.70736 25.19339,6.16636 45.42306,43.24367 8.34575,7.3639 -0.0719,10.9863 -23.49259,20.43301 -68.97521,23.80995 -111.31765,-0.61366 -130.46377,-27.1237 -53.0201,-41.42631 z"></animateMotion>
+  			</circle>
+
+			
+			
+			<path class="quest-path quest-path-5" d="m 552.2926,392.7414 28.96468,81.73931 111.90662,9.36461 109.0402,55.80231 83.46988,18.45186 27.55146,-2.98767 0.88018,-22.94722 -3.19103,0.49093 -1.24041,17.73119 -23.43179,3.29781 -83.13947,-19.17935 -109.69549,-54.93454 -109.17478,-9.11236 -28.11815,-79.49451 z" fill="#3ef757"></path>
+			<circle class="quest-path quest-path-5" r="10" fill="#3ef757" stroke="#d8d5d3" strokewidth="4">
+    			<animateMotion dur="2s" repeatCount="indefinite" path="m 552.2926,392.7414 28.96468,81.73931 111.90662,9.36461 109.0402,55.80231 83.46988,18.45186 27.55146,-2.98767 0.88018,-22.94722 -3.19103,0.49093 -1.24041,17.73119 -23.43179,3.29781 -83.13947,-19.17935 -109.69549,-54.93454 -109.17478,-9.11236 -28.11815,-79.49451 z"></animateMotion>
+  			</circle>
+
+			<a href="https://discord.com/channels/1175566322462109746/1197888975302557696" target="”_blank”">	
+			<path class="part" id="quest-4" d="m 646.69054,529.61155 8.3313,11.97625 h 2.7771 l 8.85201,-11.62911 -10.06699,-22.56395 z" fill="#3ef757" description-data="<img src='media/statue.png'> Статуя"></path>
+			</a>
+			
+			
+			
+			
+
+			<path class="quest-path" id="quest-2" d="m 1031.5772,617.48744 8.3313,11.97625 h 2.7771 l 8.852,-11.62911 -10.067,-22.56395 z" fill="#ec3159" style="opacity: 0; transition: opacity 0.25s ease-in-out;"></path>
+			
+			<path class="quest-path" id="quest-3" d="m 1035.0137,416.6984 8.3313,11.97625 h 2.7771 l 8.852,-11.62911 -10.067,-22.56395 z" fill="#ec3159" style="opacity: 0; transition: opacity 0.25s ease-in-out;"></path>
+			
+
+			
+			
+			<path class="quest-path quest-path-3" d="m 698.09785,525.29163 -4.90927,26.75551 -31.66478,2.57736 -3.66833,-13.18313 -2.67776,-0.0868 4.13692,17.07459 36.32858,-3.19102 4.64892,-26.95013 z" fill="#ec3159" style="opacity: 0; transition: opacity 0.25s ease-in-out;"></path>
+			<circle class="quest-path quest-path-3" r="10" fill="#ec3159" stroke="#d8d5d3" strokewidth="4" style="opacity: 0; transition: opacity 0.25s ease-in-out;">
+    			<animateMotion dur="1s" repeatCount="indefinite" path="m 698.09785,525.29163 -4.90927,26.75551 -31.66478,2.57736 -3.66833,-13.18313 -2.67776 z"></animateMotion>
+  			</circle>
+			
+			
+			
+			
+			
+			
+			
+			
+
+			
+
+			
+			
+			
+	
+			
+			
+			
+
+			<!-- Сундуки -->
+			<!-- <path class="part chest" d="m 392.55058,274.04886 8.3313,11.97625 h 2.7771 l 8.852,-11.62911 -10.067,-22.56395 z" fill="#ffd65c" description-data="<img src='media/sand-chest.png'> Песчаный верстак <hr> <img src='media/bench_sand.png'>"></path>
+			<path class="part chest" d="m 955.73418,614.69256 8.3313,11.97625 h 2.7771 l 8.852,-11.62911 -10.067,-22.56395 z" fill="#ffd65c" description-data="<img src='media/mushroom-chest.png'> Грибной верстак <hr> <img src='media/bench_plant.png'>"></path>
+			<path class="part chest" d="m 895.59565,279.8805 8.3313,11.97625 h 2.7771 l 8.852,-11.62911 -10.067,-22.56395 z" fill="#ffd65c" description-data="<img src='media/wing-chest.png'> Крылатый верстак <hr> <img src='media/bench_wing.png'>"></path> -->
+			<a href="https://discord.com/channels/1175566322462109746/1245730989372735622" target="”_blank”">
+				<g class="marker-container chest part" transform="translate(370,220)" description-data="<img src='media/sand-chest.png'> Песчаный верстак <hr> <img src='media/bench_sand.png'>" fill="#423e3e">
+					<use href="#chest-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			<a href="https://discord.com/channels/1175566322462109746/1245730989372735622" target="”_blank”">
+				<g class="marker-container chest part" transform="translate(935,570)" description-data="<img src='media/mushroom-chest.png'> Грибной верстак <hr> <img src='media/bench_plant.png'>">
+					<use href="#chest-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			<a href="https://discord.com/channels/1175566322462109746/1245730989372735622" target="”_blank”">
+				<g class="marker-container chest part" transform="translate(875,220)" description-data="<img src='media/wing-chest.png'> Крылатый верстак <hr> <img src='media/bench_wing.png'>">
+					<use href="#chest-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			<!-- Торговец -->
+			<a href="https://discord.com/channels/1175566322462109746/1245730989372735622" target="”_blank”">
+				<g class="marker-container trader part" transform="translate(167,445)" description-data="<img src='media/shopkeeper.png'> Торговец" fill='#423e3e'>
+					<use href="#trader-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			
+			
+			
+			
+
+			<path class="quest-path quest-path-1" d="m 1022.1095,760.44554 -58.78847,-34.97853 18.90492,-99.92499 53.11205,-2.90728 4.6864,6.7258 -52.41782,1.38855 -17.70402,90.25578 43.91294,27.07674 z" fill="#ec3159" style="opacity: 0; transition: opacity 0.25s ease-in-out;"></path>
+			<circle class="quest-path quest-path-1" r="10" fill="#ec3159" stroke="#d8d5d3" strokewidth="4" style="opacity: 0; transition: opacity 0.25s ease-in-out;">
+    			<animateMotion dur="2s" repeatCount="indefinite" path="m 1022.1095,760.44554 -58.78847,-34.97853 18.90492,-99.92499 53.11205, -2.90728 4.6864 z"></animateMotion>
+  			</circle>
+
+			
+			<path class="quest-path quest-path-2" d="m 1036.1009,607.2764 -14.9732,-74.86633 28.7192,-59.40214 -3.6206,-44.79707 4.1115,-5.27746 5.4002,50.07453 -27.2464,59.40214 12.2731,65.29325 z" fill="#ec3159" style="opacity: 0; transition: opacity 0.25s ease-in-out;"></path>
+			<circle class="quest-path  quest-path-2" r="10" fill="#ec3159" stroke="#d8d5d3" strokewidth="4" style="opacity: 0; transition: opacity 0.25s ease-in-out;">
+    			<animateMotion dur="2s" repeatCount="indefinite" path="m 1035.1009,607.2764 -14.9732,-74.86633 28.7192,-59.40214 -3.6206,-44.79707 4.1115 z"></animateMotion>
+  			</circle>
+			
+			<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3255809766" target="”_blank”">
+			<path class="part man" id="quest-reika" d="m 1061.0329,667.56196 8.3313,11.97625 h 2.7771 l 8.852,-11.62911 -10.067,-22.56395 z" fill="#4061ef" description-data="<img src='media/guy-quest-1.png'>Квест Рейки"></path>
+			</a>
+			<a href="https://discord.com/channels/1175566322462109746/1245730989372735622" target="”_blank”">
+				<g class="marker-container man part" transform="translate(1041,607)" description-data="<img src='media/guy-quest-1.png'>Квест Рейки">
+					<use href="#man-marker" width="60" height="70" color="#4061ef"/>
+				</g>
+			</a>
+			
+			<path class="quest-path quest-path-4" d="m 1024.7043,728.43688 8.3313,11.97625 h 2.7771 l 8.852,-11.62911 -10.067,-22.56395 z" fill="#3ef757"></path>
+			
+			<path class="quest-path quest-path-4" d="m 1033.769,620.28595 0,39.76507 -3.4365,20.37347 -4.0526,44.796 7.2437,-16.05573 2.9244,-27.16582 3.9485,-22.19338 -0.3681,-31.78751 z" fill="#3ef757"></path>
+			<g class="marker-container quest-path quest-path-4" transform="translate(1013,570)">
+					<use href="#man-marker" width="60" height="70" color="#4061ef"/>
+			</g>
+			<path class="quest-path quest-path-4" d="m 1041.4591,721.67105 -3.3945,-7.12715 26.2646,-42.71063 4.1097,4.71464 z" fill="#4061ef"></path>
+			<g class="marker-container quest-path quest-path-4" transform="translate(1010,350)">
+					<use href="#yona-marker" width="60" height="70" color="#4061ef"/>
+			</g>
+			<circle class="quest-path  quest-path-4" r="10" fill="#4061ef" stroke="#d8d5d3" strokewidth="4">
+    			<animateMotion dur="2s" repeatCount="indefinite" path="m 1045.5786,428.02071 4.1656,45.82217 -28.4653,58.14555 15.7948,75.676 -3.1242,53.4592 -3.2979,17.70402 -3.8185,43.91291 11.1084,-7.8106 26.0354,-42.87149 9.1991 z"></animateMotion>
+  			</circle>
+
+			<g class="marker-container quest-path quest-path-4" transform="translate(1004,678)">
+					<use href="#man-marker" width="60" height="70" color="#4061ef"/>
+			</g>
+			
+			
+            
+		</svg>
+			<div class="description"></div>
+			
+
+			<img src="media/map.png" width="900">
+			<div class="info">
+				<div class="legend-title">Метки</div>
+				<hr>
+				<div class="legend-grid">
+					<!-- Ряд 1 -->
+					<div class="legend-item" data-target="yona" data-description="Квесты Йоны">
+						<div class="box red"></div>
+						<div class="box-label">Йона</div>
+					</div>
+					<div class="legend-item" data-target="man" data-description="Квесты Парня">
+						<div class="box blue"></div>
+						<div class="box-label">Парень</div>
+					</div>
+					<div class="legend-item" data-target="quest" data-description="Общие квесты">
+						<div class="box green"></div>
+						<div class="box-label">Квесты</div>
+					</div>
+					<div class="legend-item" data-target="chest" data-description="Сундуки с верстаками">
+						<div class="box yellow"></div>
+						<div class="box-label">Сундуки</div>
+					</div>
+					
+					<!-- Ряд 2 -->
+					<div class="legend-item" data-target="trader" data-description="Торговцы">
+						<div class="box brown"></div>
+						<div class="box-label">Торговцы</div>
+					</div>
+					<div class="legend-item" data-target="boss" data-description="Боссы">
+						<div class="box black"></div>
+						<div class="box-label">Боссы</div>
+					</div>
+					<div class="legend-item" data-target="camp" data-description="Лагеря туземцев">
+						<div class="box camp"></div>
+						<div class="box-label">Лагеря</div>
+					</div>
+					<!-- <div class="legend-item" data-target="purple" data-description="Секретные места">
+						<div class="box purple"></div>
+						<div class="box-label">Секреты</div>
+					</div> -->
+					
+					<!-- Ряд 3 --
+					<div class="legend-item" data-target="orange" data-description="Ресурсы">
+						<div class="box orange"></div>
+						<div class="box-label">Ресурсы</div>
+					</div>
+					<div class="legend-item" data-target="pink" data-description="NPC">
+						<div class="box pink"></div>
+						<div class="box-label">NPC</div>
+					</div>
+					<div class="legend-item" data-target="cyan" data-description="Вода">
+						<div class="box cyan"></div>
+						<div class="box-label">Вода</div>
+					</div>
+					<div class="legend-item" data-target="gray" data-description="Разное">
+						<div class="box gray"></div>
+						<div class="box-label">Разное</div>
+					</div> -->
+					
+					<!-- Ряд 4 --
+					<div class="legend-item" data-target="lime" data-description="Растения">
+						<div class="box lime"></div>
+						<div class="box-label">Растения</div>
+					</div>
+					<div class="legend-item" data-target="teal" data-description="Животные">
+						<div class="box teal"></div>
+						<div class="box-label">Животные</div>
+					</div>
+					<div class="legend-item" data-target="indigo" data-description="Артефакты">
+						<div class="box indigo"></div>
+						<div class="box-label">Артефакты</div>
+					</div>
+					<div class="legend-item" data-target="violet" data-description="Квестовые предметы">
+						<div class="box violet"></div>
+						<div class="box-label">Квесты</div>
+					</div> -->
+				</div>
+				<div class="box-description"></div>
+				
+			
+			
+
+<!-- 1. jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- 2. Ripples -->
+<script src="js/ripples.js"></script>
+
+<!-- 3. Ваш main.js (если он использует jQuery) -->
+<script src="js/main.js"></script>
+
+<!-- 4. Инициализация Ripples -->
 <script>
-$(document).ready(function() {
-	try {
-		$('body').ripples({
-			resolution: 512,
-			dropRadius: 20, //px
-			perturbance: 0.04,
-		});
-		$('main').ripples({
-			resolution: 128,
-			dropRadius: 10, //px
-			perturbance: 0.04,
-			interactive: false
-		});
-	}
-	catch (e) {
-		$('.error').show().text(e);
-	}
-
-	$('.js-ripples-disable').on('click', function() {
-		$('body, main').ripples('destroy');
-		$(this).hide();
-	});
-
-	$('.js-ripples-play').on('click', function() {
-		$('body, main').ripples('play');
-	});
-
-	$('.js-ripples-pause').on('click', function() {
-		$('body, main').ripples('pause');
-	});
-
-	// Automatic drops
-	setInterval(function() {
-		var $el = $('main');
-		var x = Math.random() * $el.outerWidth();
-		var y = Math.random() * $el.outerHeight();
-		var dropRadius = 20;
-		var strength = 0.04 + Math.random() * 0.04;
-
-		$el.ripples('drop', x, y, dropRadius, strength);
-	}, 400);
-});
+ $(document).ready(function() {
+		$('.ripples').ripples({
+			resolution: 256,
+			dropRadius: 20,
+			perturbance: 0.04
+		});	
+		
+});	
+ 
 </script>
+
+
+</div>
+<div style="all: unset;">
+	<div style="all: unset;">
+
+	</div>
+</div>
 </body>
 </html>

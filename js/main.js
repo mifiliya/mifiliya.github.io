@@ -94,17 +94,28 @@ $(document).ready(function() {
 
     // --- Обработчики для квестов ---
     function setupQuestHover(questId, targetElements) {
+        let mouse = 0;
         $(questId).on({
+            
             mouseover: function() {
+             if (mouse == 0){
+                mouse = 1;
+                // Поднимаем маркер на передний план
+                const $this = $(this);
+                 const svgParent = $this.parents('svg');
+                 console.log("Наведение " + svgParent);
+                 $this.appendTo(svgParent);
+
                 if ($(this).is(':visible')) {
-                    $(targetElements).css({
-                        opacity: 1,
-                        transition: 'opacity 0.25s ease-in-out'
-                    }).show();
+                    $(targetElements).css({opacity: 1}).show();
                 }
+            }
             },
             mouseout: function() {
-                $(targetElements).css({opacity: 0});
+                mouse = 0;
+                console.log("Уход " + targetElements);
+                //console.log(targetElements);
+                $(targetElements).css({opacity: 1}).hide();
             }
         });
     }
