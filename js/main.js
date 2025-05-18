@@ -1,4 +1,27 @@
 $(document).ready(function() {
+    document.addEventListener('keydown', function(e) {
+  if (e.key === 'F12' || 
+      (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+      (e.ctrlKey && e.shiftKey && e.key === 'J') ||
+      (e.ctrlKey && e.shiftKey && e.key === 'C')) {
+    e.preventDefault();
+    
+  }
+});
+
+// Запрет контекстного меню (правой кнопки мыши)
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+ 
+});
+
+// Дополнительно: блокировка выделения текста (опционально)
+document.addEventListener('selectstart', function(e) {
+  e.preventDefault();
+});
+
+
+    
     // --- Инициализация ---
     const $boxDescription = $('.box-description');
     const $legendItems = $('.legend-item');
@@ -103,7 +126,8 @@ $(document).ready(function() {
                 // Поднимаем маркер на передний план
                 const $this = $(this);
                  const svgParent = $this.parents('svg');
-                 console.log("Наведение " + svgParent);
+                 console.log("ID квеста: " + questId);
+                 console.log("Класс квеста: " + targetElements);
                  $this.appendTo(svgParent);
 
                 if ($(this).is(':visible')) {
@@ -113,8 +137,7 @@ $(document).ready(function() {
             },
             mouseout: function() {
                 mouse = 0;
-                console.log("Уход " + targetElements);
-                //console.log(targetElements);
+                //console.log("Уход " + targetElements);
                 $(targetElements).css({opacity: 1}).hide();
             }
         });
@@ -123,10 +146,10 @@ $(document).ready(function() {
     // Настройка обработчиков для всех квестов
     setupQuestHover("#quest-1", "#quest-2, #quest-3, .quest-path-1, .quest-path-2");
     setupQuestHover("#quest-4", ".quest-path-3");
-    setupQuestHover("#quest-5", ".quest-path-5");
+    setupQuestHover("#gates", ".quest-path-5");
     setupQuestHover("#quest-shino", "#quest-shino-1, .quest-path-shino");
-    setupQuestHover("#quest-giant", ".quest-giant");
-    setupQuestHover("#quest-salli", ".quest-salli");
+    setupQuestHover("#quest-giant", ".gates, .quest-giant");
+    setupQuestHover("#quest-salli", ".most, .gates, .quest-salli");
     setupQuestHover("#quest-dalman", ".quest-dalman");
     setupQuestHover("#quest-reika", "#quest-2, #quest-3, .quest-path-1, .quest-path-2, .quest-path-4");
 });
