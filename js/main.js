@@ -1,113 +1,71 @@
 $(document).ready(function() {
-    document.addEventListener('keydown', function(e) {
-  if (e.key === 'F12' || 
-      (e.ctrlKey && e.shiftKey && e.key === 'I') || 
-      (e.ctrlKey && e.shiftKey && e.key === 'J') ||
-      (e.ctrlKey && e.shiftKey && e.key === 'C')) {
-    e.preventDefault();
-    
-  }
-});
+    // --- Защита от DevTools и контекстного меню ---
+    const disableDevTools = (e) => {
+        const devToolsShortcuts = [
+            e.key === 'F12',
+            e.ctrlKey && e.shiftKey && e.key === 'I',
+            e.ctrlKey && e.shiftKey && e.key === 'J',
+            e.ctrlKey && e.shiftKey && e.key === 'C'
+        ];
+        
+        if (devToolsShortcuts.some(condition => condition)) {
+            e.preventDefault();
+        }
+    };
 
-// Запрет контекстного меню (правой кнопки мыши)
-document.addEventListener('contextmenu', function(e) {
-  e.preventDefault();
- 
-});
+    document.addEventListener('keydown', disableDevTools);
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+    document.addEventListener('selectstart', (e) => e.preventDefault());
 
-// Дополнительно: блокировка выделения текста (опционально)
-document.addEventListener('selectstart', function(e) {
-  e.preventDefault();
-});
-
-
-    
-    // --- Инициализация ---
+    // --- Инициализация элементов ---
     const $boxDescription = $('.box-description');
     const $legendItems = $('.legend-item');
     let activeFilters = [];
-    
 
+    // --- Фильтрация меток ---
+    const updateMapVisibility = () => {
+        $(".part").hide();
         
-    //     // Классифицируем все метки по цветам
-    //     $(".part").each(function() {
-    //         const fillColor = $(this).attr('fill');
-    //         switch(fillColor) {
-    //             case '#3ef757': $(this).addClass('green'); break;  // Места интереса
-    //             case '#ec3159': $(this).addClass('red'); break;    // Квесты Йоны
-    //             case '#4061ef': $(this).addClass('blue'); break;   // Квесты Парня
-    //             case '#ffd65c': $(this).addClass('yellow'); break; // Сундуки
-    //             case '#9d6b61': $(this).addClass('brown'); break;  // Торговец
-    //             case '#423e3e': $(this).addClass('black'); break;  // Боссы
-    //             case '#940000': $(this).addClass('camp'); break;   // Лагеря
-    //         }
-    //     });
-    // }
-   
+        if (!activeFilters.length) return;
+        
+        activeFilters.forEach(filter => $(`.part.${filter}`).show());
+    };
 
-    // --- Клик по элементам легенды ---
-    $legendItems.click(function() {
-        const targetClass = $(this).attr('data-target');
+    // --- Обработчики событий ---
+    $legendItems.on('click', function() {
         $(this).toggleClass('active');
-        
-        // Обновляем активные фильтры
-        activeFilters = $('.legend-item.active').map(function() {
-            return $(this).attr('data-target');
-        }).get();
-        
+        activeFilters = $('.legend-item.active').map((_, el) => $(el).attr('data-target')).get();
         updateMapVisibility();
     });
 
-    // --- Управление видимостью меток ---
-    function updateMapVisibility() {
-        // Сначала скрываем все метки
-        $(".part").hide();
-        
-        // Если нет активных фильтров - ничего не показываем
-        if (activeFilters.length === 0) return;
-        
-        // Показываем метки по выбранным фильтрам
-        activeFilters.forEach(filter => {
-            $(`.part.${filter}`).show();
-        });
-    }
-
-    // --- Обработчик наведения для панели описания ---
     $(document).on({
         mouseenter: function() {
-            // Показываем описание только для видимых меток
             if ($(this).is(':visible')) {
                 const description = $(this).attr('description-data');
                 if (description) {
                     $('.description')
                         .html(description)
                         .stop(true, true)
-                        .css({
-                            'display': 'block',
-                            'opacity': 0
-                        })
-                        .animate({'opacity': 1}, 200);
+                        .css({ 'display': 'block', 'opacity': 0 })
+                        .animate({ 'opacity': 1 }, 200);
                 }
             }
         },
         mouseleave: function() {
             $('.description')
                 .stop(true, true)
-                .animate({'opacity': 0}, 100, function() {
+                .animate({ 'opacity': 0 }, 500, function() {
                     $(this).css('display', 'none');
                 });
         }
     }, '.part');
 
-    // --- Описание при наведении на элементы легенды ---
     $legendItems.hover(
         function() {
             const desc = $(this).attr('data-description');
-            $boxDescription.text(desc)
-                .css({
-                    left: $(this).offset().left,
-                    top: $(this).offset().top - 5
-                })
+            $boxDescription
+                .text(desc)
+                .css({ left: $(this).offset().left, top: $(this).offset().top - 5 })
                 .css('visibility', 'visible');
         },
         function() {
@@ -115,41 +73,42 @@ document.addEventListener('selectstart', function(e) {
         }
     );
 
-    // --- Обработчики для квестов ---
-    function setupQuestHover(questId, targetElements) {
-        let mouse = 0;
-        $(questId).on({
-            
-            mouseover: function() {
-             if (mouse == 0){
-                mouse = 1;
-                // Поднимаем маркер на передний план
-                const $this = $(this);
-                 const svgParent = $this.parents('svg');
-                 console.log("ID квеста: " + questId);
-                 console.log("Класс квеста: " + targetElements);
-                 $this.appendTo(svgParent);
+    // --- Оптимизированная функция для квестов ---
+    const setupQuestHover = (questId, targetElements) => {
+        let isHovered = false;
+        let shownElements = [];
 
-                if ($(this).is(':visible')) {
-                    $(targetElements).css({opacity: 1}).show();
+        $(questId).on({
+            mouseover: function() {
+                if (!isHovered) {
+                    isHovered = true;
+                    $(this).appendTo($(this).parents('svg'));
+
+                    if ($(this).is(':visible')) {
+                        shownElements = $(targetElements).filter(':hidden').toArray();
+                        $(shownElements).css({ opacity: 1 }).show();
+                    }
                 }
-            }
             },
             mouseout: function() {
-                mouse = 0;
-                //console.log("Уход " + targetElements);
-                $(targetElements).css({opacity: 1}).hide();
+                isHovered = false;
+                $(shownElements).hide();
+                shownElements = [];
             }
         });
-    }
+    };
 
-    // Настройка обработчиков для всех квестов
-    setupQuestHover("#quest-1", "#quest-2, #quest-3, .quest-path-1, .quest-path-2");
-    setupQuestHover("#quest-4", ".quest-path-3");
-    setupQuestHover("#gates", ".quest-path-5");
-    setupQuestHover("#quest-shino", "#quest-shino-1, .quest-path-shino");
-    setupQuestHover("#quest-giant", ".gates, .quest-giant");
-    setupQuestHover("#quest-salli", ".most, .gates, .quest-salli");
-    setupQuestHover("#quest-dalman", ".quest-dalman");
-    setupQuestHover("#quest-reika", "#quest-2, #quest-3, .quest-path-1, .quest-path-2, .quest-path-4");
+    // Настройка квестов (можно вынести в конфиг)
+    const questConfigs = [
+        { id: "#quest-1", targets: "#quest-2, #quest-3, .quest-path-1, .quest-path-2" },
+        { id: "#quest-4", targets: ".quest-path-3" },
+        { id: "#gates", targets: ".quest-path-5" },
+        { id: "#quest-shino", targets: "#quest-shino-1, .quest-path-shino" },
+        { id: "#quest-giant", targets: ".gates, .quest-giant" },
+        { id: "#quest-salli", targets: ".most, .gates, .quest-salli" },
+        { id: "#quest-dalman", targets: ".quest-dalman" },
+        { id: "#quest-reika", targets: "#quest-2, #quest-3, .quest-path-1, .quest-path-2, .quest-path-4" }
+    ];
+
+    questConfigs.forEach(({ id, targets }) => setupQuestHover(id, targets));
 });
