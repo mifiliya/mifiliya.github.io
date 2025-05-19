@@ -112,3 +112,35 @@ $(document).ready(function() {
 
     questConfigs.forEach(({ id, targets }) => setupQuestHover(id, targets));
 });
+
+$(document).ready(function() {
+  // Инициализация эффекта
+  var $water = $('.ripples').ripples({
+    resolution: 256,
+    dropRadius: 20,
+    perturbance: 0.04,
+    interactive: true
+  });
+  
+  // Состояние эффекта (включен по умолчанию)
+  var ripplesEnabled = true;
+  
+  // Обработчик кнопки
+  $('#ripple-toggle').click(function() {
+    if(ripplesEnabled) {
+      // Выключаем эффект
+      $water.ripples('destroy');
+      $(this).text('Включить рябь');
+    } else {
+      // Включаем эффект
+      $water = $('.ripples').ripples({
+        resolution: 256,
+        dropRadius: 20,
+        perturbance: 0.04,
+        interactive: true
+      });
+      $(this).text('Выключить рябь');
+    }
+    ripplesEnabled = !ripplesEnabled;
+  });
+});
