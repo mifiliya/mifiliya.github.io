@@ -1,14 +1,22 @@
 /* Обновленные стили для мобильного меню */
-@media (max-width: 768px) {
+@media (max-width: 810px) {
   .info {
     display: none !important;
   }
 
+  .mobile-menu-toggle {
+    display: block !important; /* Показываем на мобильных */
+  }
+
+  .mobile-menu-toggle:hover {
+  color: red !important;
+}
+
   /* Сдвигаем основной контент на всю ширину */
   .content {
     position: static;
-    width: 90% !important;
-    
+    width: 95% !important;
+    top: 80px !important;
     left: 10px !important;
     
   }
@@ -104,7 +112,7 @@ body {
     padding: 20px;
     box-sizing: border-box;
     width: 70%;
-    left: 400px;
+    left: 29%;
     top: calc(0% - -60px);
     font-family: sans-serif;
     text-align: left;
@@ -243,12 +251,25 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
+.mobile-menu-toggle {
+  display: none; /* По умолчанию скрыто на десктопе */
+  cursor: pointer;
+  font-size: 24px;
+  color: white; /* Белый цвет иконок */
+  background: none;
+  border: none;
+  padding: 8px;
+  margin-left: 10px;
+  transition: transform 0.3s ease;
+}
+
 
 .info {
     position: fixed;
     padding: 20px;
     box-sizing: border-box;
-    width: 300px;
+    width: 27%;
+    max-width: 300px; ;
     left: 10px;
     top: calc(0% - -60px);
     font-family: sans-serif;
