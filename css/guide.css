@@ -1,3 +1,92 @@
+/* Обновленные стили для мобильного меню */
+@media (max-width: 768px) {
+  .info {
+    display: none !important;
+  }
+
+  /* Сдвигаем основной контент на всю ширину */
+  .content {
+    position: static;
+    width: 90% !important;
+    
+    left: 10px !important;
+    
+  }
+
+  /* Адаптация слайдшоу */
+  .slideshow-background {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    left: 10px !important;
+    
+  }
+  
+  .nav-links {
+    position: fixed;
+    top: 60px; /* Отступ под шапку */
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background: rgba(30, 30, 40, 0.99);
+    flex-direction: column;
+    gap: 15px;
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+   
+  }
+
+  .nav-links.mobile-visible {
+    transform: translateY(-4px);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+   .nav-link {
+    width: 90%;
+    padding: 15px 20px;
+    margin-bottom: 0px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+  }
+  .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    transform: translateX(5px);
+  }
+
+  .nav-link:active {
+    transform: scale(0.98);
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* Дополнительные стили для очень маленьких экранов */
+@media (max-width: 480px) {
+  .content {
+    width: 95% !important;
+    padding: 15px !important;
+  }
+  
+  .nav-links {
+    top: 56px;
+    padding: 15px;
+  }
+  
+  .nav-link {
+    padding: 12px 15px !important;
+    font-size: 15px;
+  }
+}
+
+
+
+
+
 body {
   margin: 0; 
   padding: 0; 
@@ -134,6 +223,7 @@ body {
   font-weight: bold;
 }
 
+/* Десктопное меню */
 .nav-links {
   display: flex;
   gap: 20px;
@@ -199,14 +289,14 @@ body {
 
 .slideshow-background {
   position: fixed;
-  width: 608px; /* Ширина как у вашего контента */
+  width: 608px; 
   height: 1000px;
   left: 35%; /* Центрирование */
 }
 
 .slide {
   position: fixed;
-  width: 30%;
+  width: 608px;
   height: 100%;
   background-size: cover;
   background-position: center;
