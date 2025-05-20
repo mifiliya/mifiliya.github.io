@@ -155,7 +155,7 @@ body {
 
 
 .info {
-    position: absolute;
+    position: fixed;
     padding: 20px;
     box-sizing: border-box;
     width: 300px;
@@ -198,15 +198,15 @@ body {
 
 
 .slideshow-background {
-  position: absolute;
+  position: fixed;
   width: 608px; /* Ширина как у вашего контента */
   height: 1000px;
   left: 35%; /* Центрирование */
 }
 
 .slide {
-  position: absolute;
-  width: 100%;
+  position: fixed;
+  width: 30%;
   height: 100%;
   background-size: cover;
   background-position: center;
