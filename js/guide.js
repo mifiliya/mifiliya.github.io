@@ -42,3 +42,34 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+  const guideItems = document.querySelectorAll('.mod-item');
+  
+  guideItems.forEach(item => {
+    const link = item.querySelector('.mod-link');
+    const hiddenContent = item.querySelector('.hidden-content');
+    
+    if (hiddenContent) {
+      link.addEventListener('click', function(e) {
+        // Проверяем, не является ли ссылка внешней
+        if (this.getAttribute('href') && this.getAttribute('href') !== '#') {
+          // Если это обычная ссылка, не предотвращаем переход
+          return;
+        }
+        
+        e.preventDefault();
+        
+        // Закрываем все открытые элементы
+        document.querySelectorAll('.mod-item.expanded').forEach(openItem => {
+          if (openItem !== item) {
+            openItem.classList.remove('expanded');
+          }
+        });
+        
+        // Переключаем текущий элемент
+        item.classList.toggle('expanded');
+      });
+    }
+  });
+});

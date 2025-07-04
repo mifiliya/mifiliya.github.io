@@ -107,6 +107,7 @@ body {
   
 }
 
+
 .content {
   position: absolute;
     padding: 20px;
@@ -117,6 +118,7 @@ body {
     font-family: sans-serif;
     text-align: left;
     font-size:16px;
+    line-height: 1.5em;
     
     /* Темный стеклянный эффект */
     background: rgba(30, 30, 40, 0.75);
@@ -175,7 +177,7 @@ body {
     background 0.3s ease,
     border-color 0.3s ease,
     color 0.3s ease,
-    transform 0.1s ease; /* Добавляем transform для анимации клика */
+     transform 0.1s ease; /*Добавляем transform для анимации клика */
 }
 
 .guides-link:hover {
@@ -297,14 +299,14 @@ body {
 }
 
 .info a {
-    color: #7bb8ff;
+    color: #dae8f8;
     text-decoration: none;
     transition: color 0.2s;
 }
 
 .info a:hover {
     color: #a8d2ff;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 
@@ -332,4 +334,173 @@ body {
 img{
   max-width: 100%;
   margin: 15px 0 15px 0px;
+}
+
+/* Пункты списка */
+.mod-item {
+  margin-bottom: 12px;
+  
+}
+
+
+/* Стили для скрытого содержимого */
+.hidden-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 8px 8px;
+  margin-top: -8px;
+}
+
+.hidden-content p {
+  padding: 15px;
+  margin: 0;
+  text-indent: 2ch;
+}
+
+.mod-item.expanded .hidden-content {
+  max-height: 1500px; /* Максимальная высота, можно изменить */
+  transition: max-height 0.5s ease-in;
+}
+
+.mod-item.expanded .guides-link {
+  border-radius: 8px 8px 0 0;
+}
+
+/* Ссылки */
+.mod-link {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  color: #e0e0ff;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 400;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(4px);
+  transition: 
+    background 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+     transform 0.1s ease; /*Добавляем transform для анимации клика */
+}
+
+.mod-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+
+}
+
+.mod-link:active {
+  transform: scale(0.99); /* Эффект "нажатия" */
+  background: rgba(255, 255, 255, 0.15); /* Лёгкое затемнение при клике */
+}
+
+.buttons-wrapper {
+            float: right;
+            shape-outside: margin-box;
+            margin: 20px;
+            
+        }
+        .author-btn {
+            background: none;
+            color: #00ffff;
+            padding: 8px 15px;
+            border: 1px solid #00ffff;
+            font-weight: bold;
+            text-decoration: none;
+            text-align: center;
+            display: block;
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+        .author-btn:hover {
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        .download-btn {
+            background: none;
+            color: #b94141;
+  padding: 12px 25px;
+  border: 1px solid #b94141;
+            font-weight: bold;
+            text-decoration: none;
+            text-align: center;
+            display: block;
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+.download-btn:hover {
+  background: rgba(255, 0, 0, 0.1);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.93);
+}
+        .install-guide-btn {
+            background: none;
+            color: #00c3ff;
+            padding: 12px 41px;
+            border: 1px solid #00c3ff;
+            font-weight: bold;
+            text-decoration: none;
+            text-align: center;
+            display: block;
+            transition: 0.3s;
+        }
+.install-guide-btn:hover {
+  background: rgba(0, 135, 255, 0.16);
+  box-shadow: 0 0 15px rgba(0, 219, 255, 0.87);
+}
+        .description {
+            color: #e0e0e0;
+            text-align: justify;
+        }
+        .mod-image {
+            width: 100%;
+            border: 1px solid #ff00ff;
+            margin-top: 20px;
+        }
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 10px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  /* background: rgba(255, 255, 255, 0.05); */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(4px);
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
+}
+
+.menu-item {
+  margin-bottom: 5px;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 15px rgba(2, 2, 2, 0.13);
+}
+
+.blue{
+  color:#00c3ff;
+}
+
+code {
+  background-color: #1e1e1e;
+  color: #4ef55c;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  padding: 2px 0px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+pre code {
+  display: block;
+  padding: 1em;
+  overflow-x: auto;
+  line-height: 1.5;
 }
